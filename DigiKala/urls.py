@@ -1,9 +1,12 @@
 
 from django.contrib import admin
-from django.urls import path
-from shop.views import hello
+from django.urls import path,include
+from . import settings
+from django.conf.urls.static import static
+
+import shop
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('hi/', hello),
-]
+    path('', include('shop.urls')),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

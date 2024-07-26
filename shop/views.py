@@ -1,5 +1,7 @@
-from django.shortcuts import render,HttpResponse
+from django.shortcuts import render
+from .models import Product
 
 # Create your views here.
 def hello(request):
-    return HttpResponse("<h1>سلام به دیجی کالا خوش آمدید.</h1>")
+    all_products = Product.objects.all()
+    return render(request, 'index.html' , {'products': all_products})
