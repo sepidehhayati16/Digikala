@@ -43,15 +43,22 @@ def signup_user(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             username = form.cleaned_data['username']
             password1 = form.cleaned_data['password1']
             user = authenticate(request, username=username, password=password1)
-            login(request, user)
-            messages.success(request,'اکانت شما ساخته شد')
-            return redirect('home')
+            if user is not None:
+                login(request, user)
+                messages.success(request,'اکانت شما ساخته شد')
+                return redirect('home')
+            else:
+                messages.success(request, 'مشکلی در ثبت نام شما وجود دارد')
+                return redirect('signup')
         else:
-            messages.success(request, 'مشکلی در ثبت نام شما وجود دارد')
-            return redirect('signup')
+            return render(request, 'signup.html',{'form': form})
     else:
-        return render(request, 'signup.html',{'form':form})
+        return redirect('signup')
+
+def product(request,pk):
+    product = Product.objects.get(id=pk)
+    return render(request, 'product.html' , {'product': product})

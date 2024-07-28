@@ -25,7 +25,7 @@ class SignUpForm(UserCreationForm):
     password1 = forms.CharField(
         label='',
         max_length=30,
-        widget= forms.PasswordInput(
+        widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
                 'name': 'password',
