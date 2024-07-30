@@ -8,6 +8,9 @@ from django import forms
 from .forms import SignUpForm
 
 # Create your views here.
+def category_summary(request):
+    all_cat = Category.objects.all()
+    return render(request,'category_summary.html',{'category':all_cat})
 def hello(request):
     all_products = Product.objects.all()
     return render(request, 'index.html' , {'products': all_products})
