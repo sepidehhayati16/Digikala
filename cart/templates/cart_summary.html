@@ -27,9 +27,25 @@
           {% if product.is_sale %}
         <p class="card-text">  قیمت💰: <strike> {{ product.price| intcomma}} </strike>  -  {{ product.sale_price | intcomma }}</p>
               {% else %}
-              <p class="card-text">ma } قیمت💰: {{ product.price| intcomma}}</p>
+              <p class="card-text"> قیمت💰: {{ product.price| intcomma}}</p>
         {% endif %}
-      <br><br>
+      <p class="card-text">  تعداد:</p>
+       <select class="form-select" id="select{{ product.id }}" >
+           {% for key,value in quantities.items %}
+           {% if key == product.id|slugify %}
+               <option selected> {{ value }}</option>
+            {% endif %}
+            {% endfor %}
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        </select>
+        <br>
+      <button type="button" data-index="{{ product.id }}"
+              class="btn btn-primary update-cart">ویرایش</button>
       <a href="{% url 'home' %}" class="btn btn-secondary">بازگشت به صفحه اصلی</a>
       </div>
     </div>
@@ -64,5 +80,29 @@
     <center><h3 class="container">&#128531سبد خرید شما خالی میباشد.</h3></center>
     {% endif %}
     <br>
+        <script>
+    $(document).on('click', '.update-cart',function(e){
+        e.preventDefault();
+        var productid = $(this).data('index')
+        $.ajax({
+            type: 'POST',
+            url:'{% url 'cart_update' %}',
+            data: {
+                product_id: $(this).data('index'),
+                product_qty: $('#select'+productid+' option:selected').text(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            success:function (json){
+                //console.log(json)
+                //document.getElementById('cart_quantity').textContent = json.qty
+                location.reload();
+            },
+            error: function (xhr, errmsg, err) {
+
+            }
+        })
+    })
+    </script>
 {% endblock %}
         
